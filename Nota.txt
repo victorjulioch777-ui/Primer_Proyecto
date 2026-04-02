@@ -1,0 +1,5 @@
+Faltante:
+La parte de gestion seguidores de aceptar y rechazar.
+Los colores y animaciones para la terminal.
+Documentación del codigo.
+Documentacion externa.
