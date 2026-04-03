@@ -1,3 +1,5 @@
+from urllib import response
+
 import requests
 
 BASE_URL = "http://leoviquez.com/devspaces"
@@ -271,5 +273,33 @@ def login(username: str, password: str) -> tuple:
             "password": password
         })
         return _handle_response(response)
+    except Exception as e:
+        return False, [[str(e)]]
+    
+def handle_follower(username: str, space_id: int, follower_username: str, accepted: bool):
+    """
+    Gestiona una solicitud de seguimiento (aceptar o rechazar).
+
+    Parámetros:
+        username (str): Usuario propietario del space
+        space_id (int): ID del space
+        follower_username (str): Usuario que solicita seguir
+        accepted (bool): True para aceptar, False para rechazar
+
+    Retorna:
+        list: [True] si la operación fue exitosa
+              [False] si ocurrió un error
+    """
+    try:
+        response = requests.post(
+            f"{BASE_URL}/handle_follower_request.php",
+            json={
+                "username": username,
+                "space_id": space_id,
+                "follower_username": follower_username,
+                "accepted": accepted
+            }
+        )
+        return _handle_response(response)    
     except Exception as e:
         return False, [[str(e)]]

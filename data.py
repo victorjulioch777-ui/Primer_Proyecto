@@ -1,4 +1,4 @@
-from devspace import get_followers,create_post, create_space, create_user, get_following_spaces,get_users,get_spaces_by_user,create_space,create_post,get_posts,follow_space, login
+from devspace import handle_follower,get_followers,create_post, create_space, create_user, get_following_spaces,get_users,get_spaces_by_user,create_space,create_post,get_posts,follow_space, login
 
 #Ejemplo de como agregar un nuevo usuario al sistema de DevSpace
 if False:
@@ -104,5 +104,11 @@ if False:
 #Ejemplo de como obtener la lista de espacios que un usuario específico está siguiendo en el sistema de DevSpace utilizando una solicitud POST a la API correspondiente.
 if True:
     success, data = get_following_spaces("ana")
+    print(success)
+    print(data)
+
+#Ejemplo de como manejar la acción de seguir o dejar de seguir un espacio específico en el sistema de DevSpace utilizando una solicitud POST a la API correspondiente.
+if True:
+    success, data = handle_follower("leoviquez", 7, "ana", True)
     print(success)
     print(data)
