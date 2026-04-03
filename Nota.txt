@@ -1,5 +1,7 @@
 Faltante:
-La parte de gestion seguidores de aceptar y rechazar.
-Los colores y animaciones para la terminal.
-Documentación del codigo.
-Documentacion externa.
+Aceptar/rechazar seguidores
+Colores en terminal
+Animaciones para posts/snippets
+Docstrings en tu código
+Documentación externa
+Control de versiones / Git
