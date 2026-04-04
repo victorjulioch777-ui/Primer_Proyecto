@@ -162,10 +162,23 @@ def menu_principal(usuario):
             print("\n Opción inválida. Intente de nuevo.")
 
 def main():
-    usuario = iniciar_sesion()
-    menu_principal(usuario)
+    while True:
+        print("\n===== BIENVENIDO =====")
+        print("1. Iniciar sesión")
+        print("2. Crear nuevo usuario")
+        print("3. Salir")
+        opcion = input("\nSeleccione una opción: ").strip()
+
+        if opcion == "1":
+            usuario = iniciar_sesion()
+            menu_principal(usuario)
+        elif opcion == "2":
+            crear_usuario()
+        elif opcion == "3":
+            print("\nGracias por usar el programa.")
+            break
+        else:
+            print("\nOpción inválida. Intente de nuevo.")
 
 if __name__ == "__main__":
     main()
-
-    
