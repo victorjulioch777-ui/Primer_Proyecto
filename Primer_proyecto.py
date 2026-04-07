@@ -1,4 +1,5 @@
 from devspace import create_user, follow_space, get_followers, get_following_spaces, get_posts, get_spaces_by_user, get_users, login
+import time 
 
 def crear_usuario():
     while True:
@@ -175,6 +176,9 @@ def main():
         elif opcion == "2":
             crear_usuario()
         elif opcion == "3":
+            print("\nLimpiando terminal...")
+            time.sleep(2)
+            print("\033c", end="")
             print("\nGracias por usar el programa.")
             break
         else:
