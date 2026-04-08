@@ -308,7 +308,7 @@ def main():
         print(p("1. ", c.AMARILLO) + p("Iniciar Sesion", c.AZUL))
         print(p("2. ", c.AMARILLO) + p("Registrarse", c.AZUL))
         print(p("3. ", c.AMARILLO) + p("Salir", c.AZUL))
-        login = input(p("opcion: ", c.VERDE))
+        login = input(p("Opcion: ", c.VERDE))
         if login == "1": 
             usuario = iniciar_sesion()
             menu_principal(usuario)
@@ -316,6 +316,8 @@ def main():
             print("\033[H\033[J") 
             print(crear_usuario())
         elif login == "3":
+            print(t.sleep(3))
+            print(print("\033c"))
             print("\033[H\033[J")
             print(p("Salió del sistema", c.ROJO))
             exit()

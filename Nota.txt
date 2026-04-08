@@ -1,6 +1,7 @@
 Faltante:
 Aceptar/rechazar seguidores
-Colores en terminal
+create space y create post
+Colores en terminal -> Parcialmente terminado
 Animaciones para posts/snippets
 Docstrings en tu código
 Documentación externa
