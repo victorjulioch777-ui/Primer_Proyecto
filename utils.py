@@ -1,0 +1,37 @@
+# colores.py
+
+# RESET
+RESET = "\033[0m"
+
+# TEXTO
+ROJO = "\033[31m"
+VERDE = "\033[32m"
+AMARILLO = "\033[33m"
+AZUL = "\033[34m"
+MAGENTA = "\033[35m"
+CYAN = "\033[36m"
+
+# FONDOS
+FONDO_ROJO = "\033[41m"
+FONDO_VERDE = "\033[42m"
+FONDO_AMARILLO = "\033[43m"
+FONDO_AZUL = "\033[44m"
+FONDO_MAGENTA = "\033[45m"
+FONDO_CYAN = "\033[46m"
+FONDO_BLANCO = "\033[47m"
+
+# ESTILOS
+NEGRITA = "\033[1m"
+SUBRAYADO = "\033[4m"
+
+# BRILLANTES
+ROJO_BRIGHT = "\033[91m"
+VERDE_BRIGHT = "\033[92m"
+AMARILLO_BRIGHT = "\033[93m"
+AZUL_BRIGHT = "\033[94m"
+MAGENTA_BRIGHT = "\033[95m"
+CYAN_BRIGHT = "\033[96m"
+BLANCO_BRIGHT = "\033[97m"
+
+def pintar(texto, color="", fondo="", estilo=""):
+    return f"{estilo}{color}{fondo}{texto}{RESET}" 

@@ -1,64 +1,133 @@
 from devspace import create_user, follow_space, get_followers, get_following_spaces, get_posts, get_spaces_by_user, get_users, login
-import time 
+from utils import pintar as p
+import utils as c
+import time as t
 
 def crear_usuario():
+    """
+    Gestiona la creación de un usuario solicitando datos por consola.
+
+    Solicita al usuario su nombre de usuario, correo electrónico y contraseña,
+    y utiliza la función create_user para intentar registrarlo. Repite el proceso
+    hasta que el usuario sea creado exitosamente.
+
+    Args:
+        None
+    
+    Returns:
+        None
+    """
     while True:
-        print("===== Creación de usuario =====")
-        username = input("Usuario: ").strip()
-        email = input("Email: ").strip()
-        password = input("Contraseña: ").strip()
+        print("===== Creación de usuario =====", c.AZUL)
+        username = input(p("Usuario: ", c.AZUL)).strip()
+        email = input(p("Email: ", c.AZUL)).strip()
+        password = input(p("Contraseña: ", c.AZUL)).strip()
 
         success,data = create_user(username, email, password)
 
         if success:
-            print("\nUsuario creado exitosamente")
+            print(p("\nUsuario creado exitosamente", c.VERDE))
             break
         else:
-            print("\nSucedio un error")
-            print("Vuelve a intentarlo.")
+            print(p("\nSucedio un error", c.ROJO))
+            print(p("Vuelve a intentarlo.", c.ROJO))
 
 def iniciar_sesion():
-    while True:
-        print("\n===== INICIO DE SESIÓN =====")
-        username = input("Usuario: ").strip()
-        password = input("Contraseña: ").strip()
+   """
+   Gestiona el inicio de sesión de un usuario mediante consola.
+
+    Solicita al usuario su nombre de usuario y contraseña, y utiliza la función
+    login para validar las credenciales. Si el acceso es correcto, retorna el
+    nombre de usuario. Si falla, permite reintentar.
+
+    Args:
+        None
+    
+    Returns:
+        str: Nombre de usuario si el inicio de sesión es exitoso.
+    """
+   while True:
+        print("\033[H\033[J") 
+        print(p("\n===== INICIO DE SESIÓN =====", c.AZUL))
+        username = input(p("Usuario: ", c.AZUL)).strip()
+        password = input(p("Contraseña: ", c.AZUL)).strip()
 
         success,data = login(username, password)
 
         if success:
-            print("\nLogin exitoso")
-            print(f"\nBienvenido, {username}")
+            print(p("\nLogin exitoso", c.VERDE_BRIGHT))
+            print(p(f"\nBienvenido, {username}", c.VERDE_BRIGHT))
             return username
         else:
-            print("\nUsuario o contraseña incorrectos")
-            print("Vuelve a intentarlo.")
-        
+            print("\033[H\033[J")
+            print(p("\nUsuario o contraseña incorrectos", c.ROJO))
+            print(p("Vuelve a intentarlo.", c.ROJO))
+            input(p("Presione enter para Volver a intentar ", c.VERDE))
         
 def mostrar_menu():
-    print("\n===== MENÚ PRINCIPAL =====")
-    print("1. Consulta de usuarios")
-    print("2. Consultar space por usuario")
-    print("3. Seguir un space")
-    print("4. Consulta de space seguidos")
-    print("5. Consulta de seguidores")
-    print("6. Consulta de post por space")
-    print("7. Cerrar sesión")
+    """
+    Muestra el menú principal de opciones al usuario.
+
+    Presenta en consola las diferentes opciones disponibles del sistema,
+    como consultas de usuarios, spaces, seguidores y cierre de sesión.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
+    print(p("\n===== MENÚ PRINCIPAL =====", c.AZUL_BRIGHT))
+    print(p("1.", c.AMARILLO ) +p(" Consulta de usuarios", c.AZUL))
+    print(p("2.", c.AMARILLO ) +p(" Consultar space por usuario", c.AZUL))
+    print(p("3.", c.AMARILLO ) +p(" Seguir un space", c.AZUL))
+    print(p("4.", c.AMARILLO ) +p(" Consulta de space seguidos", c.AZUL))
+    print(p("5.", c.AMARILLO ) +p(" Consulta de seguidores", c.AZUL))
+    print(p("6.", c.AMARILLO ) +p(" Consulta de post por space", c.AZUL))
+    print(p("7.", c.AMARILLO ) +p(" Cerrar sesión", c.AZUL))
 
 def ver_users():
+    """
+    Obtiene y muestra la lista de usuarios registrados.
+
+    Llama a la función get_users para recuperar los usuarios. Si la operación
+    es exitosa, muestra la lista numerada en consola. Si no hay usuarios o ocurre
+    un error, informa al usuario.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
     success, data = get_users()
 
     print("\n===== LISTA DE USUARIOS =====")
     if success:
         if len(data) == 0:
-            print("No existe ningun usuario.")
+            print(p("No existe ningun usuario.", c.ROJO))
         else:
             for i, user in enumerate(data, start=1):
                 print(f"{i}. {user}")
     else:
-        print("No se pudieron cargar los usuarios.")
+        print(p("No se pudieron cargar los usuarios.", c.ROJO))
         print(data)
-        
+
 def ver_spaces_por_usuario():
+    """
+    Obtiene y muestra los spaces asociados a un usuario.
+
+    Solicita el nombre de usuario por consola y utiliza la función
+    get_spaces_by_user para recuperar los spaces vinculados. Si la operación
+    es exitosa, muestra la lista numerada. Si no hay spaces o ocurre un error,
+    informa al usuario.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
     username =  input("\nIngresa el usuario del space: ").strip()   
        
     success, data = get_spaces_by_user(username)
@@ -75,19 +144,46 @@ def ver_spaces_por_usuario():
         print(data)
 
 def seguir_space():
-        print("\n===== Seguir un space =====")
-        username = input("Ingresa tu usuario: ").strip()
-        space_id = input("Ingresa el space id que deseas seguir: ").strip()
+    """
+    Permite a un usuario seguir un space.
 
-        success, data = follow_space(username, space_id)
+    Solicita el nombre de usuario y el ID del space por consola, y utiliza la
+    función follow_space para registrar la acción. Informa si la operación fue
+    exitosa o si ocurrió un error.
 
-        if success:
-            print("\nSpace seguido exitosamente")
-        else:
-            print("\nSucedio un error")
-            print("Vuelve a intentarlo.")
+    Args:
+        None
+
+    Returns:
+        None
+    """
+    print("\n===== Seguir un space =====")
+    username = input("Ingresa tu usuario: ").strip()
+    space_id = input("Ingresa el space id que deseas seguir: ").strip()
+
+    success, data = follow_space(username, space_id)
+
+    if success:
+        print("\nSpace seguido exitosamente")
+    else:
+        print("\nSucedio un error")
+        print("Vuelve a intentarlo.")
 
 def ver_spaces_seguidos(usuario):
+    """
+    Obtiene y muestra los spaces que sigue un usuario.
+
+    Recibe el nombre de usuario como parámetro y utiliza la función
+    get_following_spaces para recuperar los spaces que sigue. Si la operación
+    es exitosa, muestra la lista numerada. Si no sigue ningún space o ocurre
+    un error, informa al usuario.
+
+    Args:
+        usuario (str): Nombre de usuario.
+
+    Returns:
+        None
+    """
     success, data = get_following_spaces(usuario)
 
     print("\n===== SPACES QUE SIGO =====")
@@ -102,6 +198,21 @@ def ver_spaces_seguidos(usuario):
         print(data)
 
 def ver_seguidores(usuario):
+
+    """
+    Obtiene y muestra los seguidores de un usuario.
+
+    Recibe el nombre de usuario como parámetro y utiliza la función
+    get_followers para recuperar la lista de seguidores. Si la operación
+    es exitosa, muestra los seguidores numerados. Si no hay seguidores o
+    ocurre un error, informa al usuario.
+
+    Args:
+        usuario (str): Nombre de usuario.
+
+    Returns:
+        None
+    """
     success, data = get_followers(usuario)
 
     print("\n===== SEGUIDORES =====")
@@ -114,8 +225,22 @@ def ver_seguidores(usuario):
     else:
         print("No se pudieron cargar los seguidores.")
         print(data)
-        
+
 def ver_posts_por_space():
+    """
+    Obtiene y muestra los posts de un space para un usuario específico.
+
+    Solicita el ID del space y el nombre de usuario por consola, y utiliza la
+    función get_posts para recuperar los posts asociados. Si la operación es
+    exitosa, muestra los posts numerados. Si no hay posts o ocurre un error,
+    informa al usuario.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
     print("\n===== Seguir un space =====")
     space_id = input("Ingrese el space id del que desea obtener los posts: ").strip()
     username = input("Ingrese el usuario que desea tener los posts: ").strip()
@@ -133,15 +258,28 @@ def ver_posts_por_space():
         print(data)
 
 def menu_principal(usuario):
+    """
+    Controla el flujo del menú principal del sistema para un usuario autenticado.
+
+    Recibe el nombre de usuario y muestra el menú de opciones de forma continua.
+    Según la opción seleccionada, ejecuta diferentes funcionalidades como ver usuarios,
+    consultar spaces, seguir spaces, ver seguidores o cerrar sesión.
+
+    Args:
+        usuario (str): Nombre de usuario autenticado.
+
+    Returns:
+        None
+    """ 
     while True:
         mostrar_menu()
         opcion = input("\nSeleccione una opción: ").strip()
 
         if opcion == "1":
-            ver_users()
+            print(ver_users())
 
         elif opcion == "2":
-            ver_spaces_por_usuario()
+            print(ver_spaces_por_usuario())
             
         elif opcion == "3":
             seguir_space()
@@ -156,33 +294,36 @@ def menu_principal(usuario):
             ver_posts_por_space()
 
         elif opcion == "7":
-            print("\nSesión cerrada.")
+            print(p("\nSesión cerrada.", c.VERDE))
             break
 
         else:
-            print("\n Opción inválida. Intente de nuevo.")
+            print(p("\n Opción inválida. Intente de nuevo.", c.ROJO))
 
 def main():
-    while True:
-        print("\n===== BIENVENIDO =====")
-        print("1. Iniciar sesión")
-        print("2. Crear nuevo usuario")
-        print("3. Salir")
-        opcion = input("\nSeleccione una opción: ").strip()
-
-        if opcion == "1":
+    inicio = True
+    while inicio == True:
+        print("\033[H\033[J")
+        print(p("\n===== BIENVENIDO A DevSpace =====", c.NEGRITA, c.VERDE, c.FONDO_BLANCO))
+        print(p("1. ", c.AMARILLO) + p("Iniciar Sesion", c.AZUL))
+        print(p("2. ", c.AMARILLO) + p("Registrarse", c.AZUL))
+        print(p("3. ", c.AMARILLO) + p("Salir", c.AZUL))
+        login = input(p("opcion: ", c.VERDE))
+        if login == "1": 
             usuario = iniciar_sesion()
             menu_principal(usuario)
-        elif opcion == "2":
-            crear_usuario()
-        elif opcion == "3":
-            print("\nLimpiando terminal...")
-            time.sleep(2)
-            print("\033c", end="")
-            print("\nGracias por usar el programa.")
-            break
+        elif login == "2":
+            print("\033[H\033[J") 
+            print(crear_usuario())
+        elif login == "3":
+            print("\033[H\033[J")
+            print(p("Salió del sistema", c.ROJO))
+            exit()
         else:
-            print("\nOpción inválida. Intente de nuevo.")
+                print("\033[H\033[J") 
+                print(p("\nSucedio un error", c.ROJO))
+                print(p("Vuelve a intentarlo.", c.ROJO))
+                input(p("Presione enter para Volver a intentar ", c.VERDE))
 
 if __name__ == "__main__":
     main()
