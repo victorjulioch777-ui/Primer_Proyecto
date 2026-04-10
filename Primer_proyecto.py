@@ -1,4 +1,4 @@
-from devspace import create_user, follow_space, get_followers, get_following_spaces, get_posts, get_spaces_by_user, get_users, login
+from devspace import create_user, follow_space, get_followers, get_following_spaces, get_posts, get_spaces_by_user, get_users, login, create_space
 from utils import pintar as p
 import utils as c
 import time as t
@@ -80,11 +80,12 @@ def mostrar_menu():
     print(p("\n===== MENÚ PRINCIPAL =====", c.AZUL_BRIGHT))
     print(p("1.", c.AMARILLO ) +p(" Consulta de usuarios", c.AZUL))
     print(p("2.", c.AMARILLO ) +p(" Consultar space por usuario", c.AZUL))
-    print(p("3.", c.AMARILLO ) +p(" Seguir un space", c.AZUL))
-    print(p("4.", c.AMARILLO ) +p(" Consulta de space seguidos", c.AZUL))
-    print(p("5.", c.AMARILLO ) +p(" Consulta de seguidores", c.AZUL))
-    print(p("6.", c.AMARILLO ) +p(" Consulta de post por space", c.AZUL))
-    print(p("7.", c.AMARILLO ) +p(" Cerrar sesión", c.AZUL))
+    print(p("3.", c.AMARILLO ) +p(" Crear un space", c.AZUL))
+    print(p("4.", c.AMARILLO ) +p(" Seguir un space", c.AZUL))
+    print(p("5.", c.AMARILLO ) +p(" Consulta de space seguidos", c.AZUL))
+    print(p("6.", c.AMARILLO ) +p(" Consulta de seguidores", c.AZUL))
+    print(p("7.", c.AMARILLO ) +p(" Consulta de post por space", c.AZUL))
+    print(p("8.", c.AMARILLO ) +p(" Cerrar sesión", c.AZUL))
 
 def ver_users():
     """
@@ -142,6 +143,19 @@ def ver_spaces_por_usuario():
     else:
         print("No se pudieron cargar los spaces.")
         print(data)
+
+def crear_space(usuario):
+    print("\n ===Crear un space===")
+    name = input("Ingresa el nombre del space: ").strip()
+    description = input("Ingresa la descripcion del space: ").strip()
+    
+    success, data = create_space(usuario, name, description)
+
+    if success:
+        print("\nSpace creado exitosamente.")
+    else:
+        print("\Sucedio un error.")
+        print("Vuelve a intetarlo")  
 
 def seguir_space():
     """
@@ -280,20 +294,23 @@ def menu_principal(usuario):
 
         elif opcion == "2":
             print(ver_spaces_por_usuario())
-            
+
         elif opcion == "3":
+            crear_space(usuario)
+
+        elif opcion == "4":
             seguir_space()
         
-        elif opcion == "4":
+        elif opcion == "5":
             ver_spaces_seguidos(usuario)
         
-        elif opcion == "5":
+        elif opcion == "6":
             ver_seguidores(usuario)
         
-        elif opcion == "6":
+        elif opcion == "7":
             ver_posts_por_space()
 
-        elif opcion == "7":
+        elif opcion == "8":
             print(p("\nSesión cerrada.", c.VERDE))
             break
 
