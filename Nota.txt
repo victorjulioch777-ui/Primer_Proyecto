@@ -1,8 +1,10 @@
 Faltante:
+Josias:
 Aceptar/rechazar seguidores
-create space y create post
-Colores en terminal -> Parcialmente terminado
-Animaciones para posts/snippets
-Docstrings en tu código
-Documentación externa
+Colores en terminal
+Animaciones para posts/snippets 
+Retroceder y adelantar posts
+
+Victor:
+Mitad de documentación externa
 Control de versiones / Git
