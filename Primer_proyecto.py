@@ -349,7 +349,15 @@ def ver_spaces_seguidos(usuario):
         t.sleep(3)
 
 def ver_seguidores_de_mis_spaces(usuario):
+    """
+    Muestra las solicitudes/seguidores de los spaces del usuario actual.
 
+    Args:
+        usuario (str): Nombre de usuario.
+
+    Returns:
+        None
+    """
     success, data = d.get_followers(usuario)
 
     print("\033[H\033[J")
