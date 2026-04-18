@@ -1,9 +1,5 @@
 Faltante:
 Josias:
-Aceptar/rechazar seguidores
-Colores en terminal
-Animaciones para posts/snippets 
-Retroceder y adelantar posts
 
 Victor:
 Mitad de documentación externa

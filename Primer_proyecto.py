@@ -1,5 +1,5 @@
 from devspace import create_user, follow_space, get_followers, get_following_spaces, get_posts, get_spaces_by_user, get_users, login, create_space, handle_follower, create_post
-from utils import pintar as p
+from utils import pintar as p, colorear_codigo, es_codigo, escribir_lento
 import utils as c
 import time as t
 
@@ -62,18 +62,18 @@ def iniciar_sesion():
             print("\033[H\033[J")
             print(p("\nLogin exitoso", c.VERDE_BRIGHT))
             print(p(f"\nBienvenido, {username}", c.VERDE_BRIGHT))
-            t.sleep(3)
+            t.sleep(1)
             return username
         else:
             print("\033[H\033[J")
             print(p("\nUsuario o contraseña incorrectos", c.ROJO))
             print(p("Vuelve a intentarlo.", c.ROJO))
-            t.sleep(3)
-        
+            t.sleep(1)
+
 def mostrar_menu():
     """
     Muestra el menú principal de opciones al usuario.
-
+    
     Presenta en consola las diferentes opciones disponibles del sistema,
     como consultas de usuarios, spaces, seguidores y cierre de sesión.
 
@@ -123,7 +123,7 @@ def ver_users():
             print("\n===== LISTA DE USUARIOS =====")
             for i, user in enumerate(data, start=1):
                 print(f"{i}. {user}")
-                t.sleep(3)
+                t.sleep(1)
     else:
         print("\033[H\033[J")
         print("\n===== LISTA DE USUARIOS =====")
@@ -148,7 +148,7 @@ def ver_spaces_por_usuario():
     print("\033[H\033[J")
     print(p("\n===== VER SPACE POR USUARIO =====", c.NEGRITA, c.AZUL))
     username =  input(p("\nIngresa el usuario del space: ", c.VERDE)).strip()   
-       
+
     success, data = get_spaces_by_user(username)
     
     if success:
@@ -162,7 +162,7 @@ def ver_spaces_por_usuario():
             print(p(f"\n===== LISTA DE SPACES DEL USUARIO {username.upper()} =====", c.NEGRITA, c.AZUL))
             for i, space in enumerate(data, start=1):
                 print(f"{i}. {space}")
-                t.sleep(3)
+                t.sleep(1)
     else:
         print("\033[H\033[J")
         print(p(f"\n===== LISTA DE SPACES DEL USUARIO {username.upper()} =====", c.NEGRITA, c.AZUL))
@@ -214,17 +214,18 @@ def crear_post():
     """
     print("\033[H\033[J")
     print(p("\n===== Crear un post =====", c.NEGRITA, c.AZUL))
-    space_id = input(p("Ingresa el space id al que pertenecerá el nuevo post: ", c.AZUL)).strip()
-    title = input(p("Ingresa el titulo del nuevo post: ", c.AZUL)).strip()
-    content = input(p("Ingresa el contenido del nuevo post: ", c.AZUL)).strip()
-    post_type = input(p("Ingresa el tipo de post (post): ", c.AZUL)).strip()
+    id = int((input(p("Ingresa el space ID al que pertenecerá el nuevo post: ", c.AZUL))))
+    titulo = input(p("Ingresa el Titulo del nuevo post: ", c.AZUL))
+    contenido = input(p("Ingresa el Contenido del nuevo post: ", c.AZUL))
+    tipo_de_post = input(p("Ingresa el Tipo de post (post): ", c.AZUL))
 
-    success, data = create_post(space_id, title, content, post_type)
+    success, data = create_post(id, titulo, contenido, tipo_de_post)
 
     if success:
         print("\033[H\033[J")
         print(p("\n===== Crear un post =====", c.NEGRITA, c.AZUL))
         print(p("\nPost creado exitosamente", c.VERDE))
+        print(data)
         t.sleep(3)
     else:
         print("\033[H\033[J")
@@ -233,7 +234,7 @@ def crear_post():
         print(p("Vuelve a intentarlo", c.AMARILLO))
         t.sleep(3)
 
-def seguir_space():
+def seguir_space(usuario):
     """
     Permite a un usuario seguir un space.
 
@@ -248,23 +249,43 @@ def seguir_space():
         None
     """
     print("\033[H\033[J")
-    print(p("\n===== Seguir un space =====", c.AZUL, c.NEGRITA))
-    username = input(p("Ingresa tu usuario: ", c.AZUL)).strip()
+    print(p("\n===== Seguir un space =====\n", c.AZUL, c.NEGRITA))
+    user_space = input(p("Ingrese el nombre del usuario que quieres seguir:", c.AZUL))
+    success, data = get_spaces_by_user(user_space)
+
+    if success:
+        print("\033[H\033[J")
+        print(p("\n===== Seguir un space =====", c.AZUL, c.NEGRITA))
+        print(p("El usuario: ", c.AZUL) + user_space, p(" tiene los siguiente Spaces", c.AZUL))
+        
+        for space in data:
+            id_espacio, nombre, descripcion = space
+            print(p("===== SPACES =====", c.NEGRITA, c.AZUL))
+            print(p("ID: ", c.AZUL) + f"{id_espacio}")
+            print(p("Nombre: ", c.AZUL) + f"{nombre}")
+            print(p("Descripción: ", c.AZUL) + f"{descripcion}\n")
+            t.sleep(1)
+    else:
+        print("\033[H\033[J")
+        print(p("\n===== Seguir un space =====", c.AZUL, c.NEGRITA))
+        print(p("El", c.ROJO) + f"{user_space}" + p("que ingreso no tiene Spaces", c.ROJO))
+        t.sleep(2)
+
     space_id = input(p("Ingresa el space id que deseas seguir: ", c.AZUL)).strip()
 
-    success, data = follow_space(username, space_id)
+    success, data = follow_space(usuario, space_id)
 
     if success:
         print("\033[H\033[J")
         print(p("\n===== Seguir un space =====", c.AZUL, c.NEGRITA))
         print(p("\nSpace seguido exitosamente", c.VERDE))
-        t.sleep(3)
+        t.sleep(2)
     else:
         print("\033[H\033[J")
         print(p("\n===== Seguir un space =====", c.AZUL, c.NEGRITA))
         print(p("\nSucedio un error", c.ROJO))
         print(p("Vuelve a intentarlo.", c.ROJO))
-        t.sleep(3)
+        t.sleep(2)
 
 def gestion_solicitudes(usuario):
     print("\033[H\033[J")
@@ -327,6 +348,7 @@ def ver_spaces_seguidos(usuario):
         None
     """
     success, data = get_following_spaces(usuario)
+
     if success:
         if len(data) == 0:
             print("\033[H\033[J")
@@ -344,7 +366,7 @@ def ver_spaces_seguidos(usuario):
         print(p("\n===== SPACES QUE SIGO =====", c.NEGRITA, c.AZUL))
         print("No se pudieron cargar los spaces seguidos.")
         t.sleep(3)
-        
+
 def ver_seguidores(usuario):
 
     """
@@ -397,27 +419,76 @@ def ver_posts_por_space():
         None
     """
     print("\033[H\033[J")
-    print(p("\n===== Seguir un space =====", c.NEGRITA, c.AZUL))
-    space_id = input(p("Ingrese el space id del que desea obtener los posts: ", c.AZUL)).strip()
-    username = input(p("Ingrese el usuario que desea tener los posts: ", c.AZUL)).strip()
-
-    success, data = get_posts(space_id, username)
-    
+    print(p("\n===== Post por Space =====", c.NEGRITA, c.AZUL))
+    user_space = input(p("Ingrese el nombre dueño del Space: ", c.AZUL))
+    success, data = get_spaces_by_user(user_space)
     if success:
-        if len(data) == 0:
-            print("\033[H\033[J")
-            print(p("\n===== Seguir un space =====", c.NEGRITA, c.AZUL))
-            print("No hay posts para mostrar.")
-            t.sleep(3)
-        else:
-            print("\033[H\033[J")
-            print(p("\n===== Seguir un space =====", c.NEGRITA, c.AZUL))
-            for i, post in enumerate(data, start=1):
-                print(f"{i}. {post}")
-            t.sleep(3)
+        print("\033[H\033[J")
+        print(p("\n===== Spaces =====", c.AZUL, c.NEGRITA))
+        print(p("El usuario: ", c.AZUL) + user_space, p(" tiene los siguiente Spaces\n", c.AZUL))
+        
+        for space in data:
+            id_espacio, nombre, descripcion = space
+            print(p("===== space =====", c.NEGRITA, c.AZUL))
+            print(p("ID: ", c.AZUL) + f"{id_espacio}")
+            print(p("Nombre: ", c.AZUL) + f"{nombre}")
+            print(p("Descripción: ", c.AZUL) + f"{descripcion}\n")
+            t.sleep(1)
     else:
         print("\033[H\033[J")
-        print(p("\n===== Seguir un space =====", c.NEGRITA, c.AZUL))
+        print(p("\n===== Post por Space =====", c.AZUL, c.NEGRITA))
+        print(p("El", c.ROJO) + f"{user_space}" + p("que ingreso no tiene Spaces", c.ROJO))
+
+    space_id = int(input(p("Ingrese el space ID del que desea obtener los posts: ", c.AZUL)))
+
+    success2, data2 = get_posts(space_id, user_space)
+    data2 = data2[1]
+    if success2:
+        if len(data2) == 0:
+            print("\033[H\033[J")
+            print(p("\n===== Post por Space =====", c.NEGRITA, c.AZUL))
+            print(p("No hay posts para mostrar.", c.VERDE))
+            t.sleep(2)
+        else:
+            i = 1
+            while True :
+                post = data2[i]
+                id_post = post[0]
+                titulo = post[1]
+                contenido = post[2]
+                tipo = post[3]
+
+                print(f"{i+1}. Tipo de POST: [{tipo}] Título: {titulo}")
+                print(f"Post ID: {id_post}")
+                if es_codigo(contenido):
+                    contenido_mostrar = colorear_codigo(contenido)
+                else:
+                    contenido_mostrar = contenido
+
+                print("\033[H\033[J")
+                print(p("\n===== Post del Space :", c.NEGRITA, c.AZUL))
+                print("Contenido:\n")
+                escribir_lento(contenido_mostrar)
+                print(p("1) Ver post anterior   ", c.AMARILLO) + p("2) Ver siguiente post   ", c.VERDE) + p("3) Salir"))
+                opcion = input(p(">", c.VERDE))
+
+                if opcion == "1":
+                    i -= 1
+                    if i < 0:
+                        i = 0
+                elif opcion == "2":
+                    i += 1
+                    if i >= len(data2):
+                        i = len(data2) - 1
+                elif opcion == "3":
+                    break
+                else:
+                    print("\033[H\033[J")
+                    print(p("\n===== Post del Space :", c.NEGRITA, c.AZUL))
+                    print (p("Opcion no valida", c.ROJO))
+    else:
+        print("\033[H\033[J")
+        print(p("\n===== Post por Space =====", c.NEGRITA, c.AZUL))
         print("No se pudieron cargar los posts.")
         t.sleep(3)
 
@@ -453,7 +524,7 @@ def menu_principal(usuario):
             crear_post()
 
         elif opcion == "5":
-            seguir_space()
+            seguir_space(usuario)
 
         elif opcion == "6":
             gestion_solicitudes(usuario)

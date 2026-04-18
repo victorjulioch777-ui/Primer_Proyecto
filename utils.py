@@ -1,3 +1,11 @@
+import time
+
+def escribir_lento(texto, delay=0.03):
+    for letra in texto:
+        print(letra, end="", flush=True)
+        time.sleep(delay)
+    print()  # salto de línea al final
+
 # colores.py
 
 # RESET
@@ -35,3 +43,31 @@ BLANCO_BRIGHT = "\033[97m"
 
 def pintar(texto, color="", fondo="", estilo=""):
     return f"{estilo}{color}{fondo}{texto}{RESET}" 
+
+        
+keywords = [
+    "if","elif","else","for","while","break","continue","pass",
+    "def","return","lambda",
+    "True","False","None",
+    "and","or","not","in","is",
+    "try","except","finally","raise","assert",
+    "class","self","super",
+    "import","from","as",
+    "async","await","with",
+    "global","nonlocal"
+]
+
+def es_codigo(texto):
+    pistas = ["def", "for", "if", "while", "import", "print", "=", ":"]
+    return any(p in texto for p in pistas)
+
+def colorear_codigo(texto):
+    palabras = texto.split()
+
+    for i, palabra in enumerate(palabras):
+        limpia = palabra.strip("():,")
+        if limpia in keywords:
+            palabras[i] = pintar(MAGENTA_BRIGHT) + palabra
+
+    return " ".join(palabras)
+
