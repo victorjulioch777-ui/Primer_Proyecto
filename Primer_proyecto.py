@@ -501,9 +501,6 @@ def ver_posts_por_space():
     success2, data2 = d.get_posts(space_id, user_space)
 
     if success2:
-        # Ajusta esto según cómo devuelve realmente get_posts
-        # Si data2 ya es la lista de posts, no uses data2[1]
-        # Si devuelve algo como (mensaje, lista_posts), entonces sí
         posts = data2[1] if isinstance(data2, (list, tuple)) and len(data2) > 1 else data2
 
         if not posts or len(posts) == 0:
