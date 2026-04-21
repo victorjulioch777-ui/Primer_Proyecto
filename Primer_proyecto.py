@@ -6,6 +6,19 @@ import os
 import subprocess
 
 def limpiar_consola():
+    """Limpia la consola del sistema operativo actual.
+    
+    Detecta el sistema operativo mediante "os.name" y ejecuta el comando
+    limpiar la pantalla en terminal.
+    
+    Utiliza "subprocess.run()" para ejecutar el comando.
+    
+    Args:
+        None
+    
+    Returns:
+        None
+    """
     comando = "cls" if os.name == "nt" else "clear"
     subprocess.run(comando, shell=True)
 
@@ -159,7 +172,7 @@ def ver_spaces_por_usuario():
             print(p(f"\n===== LISTA DE SPACES DEL USUARIO {username.upper()} =====", c.NEGRITA, c.AZUL))
             for i, space in enumerate(data, start=1):
                 print(f"{i}. {space}")
-                t.sleep(1)
+                t.sleep(0.2)
     else:
         print(p(f"\n{data}", c.ROJO))
         t.sleep(0.2)
@@ -265,6 +278,18 @@ def seguir_space(usuario):
         t.sleep(0.2)
 
 def gestion_solicitudes(usuario):
+    """Se encarga de gestionar las solicitudes de seguimiento 
+    entre los usuarios de un space.
+    
+    Esta función muestra un menú en consola para que el usuario
+    actual procese la solicitud de seguimiento sobre un space determinado.
+
+    Args:
+        usuario (_type_): Nombre del usuario que está procesando la solicitud.
+        
+    Returns:
+        None
+    """
     ciclo = True
     while ciclo == True:
         print(p("GESTION DE SOLICITUDES DE SEGUIMIENTO", c.AZUL, c.NEGRITA))
@@ -372,7 +397,6 @@ def ver_seguidores_de_mis_spaces(usuario):
         t.sleep(0.2)
 
 def ver_seguidores(usuario):
-
     """
     Obtiene y muestra los seguidores de un usuario.
 
