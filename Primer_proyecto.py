@@ -81,13 +81,13 @@ def iniciar_sesion():
             limpiar_consola() 
             print(p("\nLogin exitoso", c.VERDE_BRIGHT))
             print(p(f"\nBienvenido, {username}", c.VERDE_BRIGHT))
-            t.sleep(1)
+            t.sleep(0.2)
             return username
         else:
             limpiar_consola() 
             print(p("\nUsuario o contraseña incorrectos", c.ROJO))
             print(p("Vuelve a intentarlo.", c.ROJO))
-            t.sleep(1)
+            t.sleep(0.2)
 
 def mostrar_menu():
     """
