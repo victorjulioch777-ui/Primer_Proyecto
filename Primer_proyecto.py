@@ -38,9 +38,16 @@ def crear_usuario():
     """
     while True:
         print(p("===== Creación de usuario =====", c.AZUL))
+        print(p("Escribe ",c.AMARILLO) + p("salir", c.ROJO) + p(" si deseas volver al menú", c.AMARILLO))
         username = input(p("Usuario: ", c.AZUL)).strip()
+        if username.lower() == "salir":
+            return
         email = input(p("Email: ", c.AZUL)).strip()
+        if email.lower() == "salir":
+            return
         password = input(p("Contraseña: ", c.AZUL)).strip()
+        if password.lower() == "salir":
+            return
 
         success,data = d.create_user(username, email, password)
 
@@ -72,8 +79,13 @@ def iniciar_sesion():
     while True:
         limpiar_consola()  
         print(p("\n===== INICIO DE SESIÓN =====", c.AZUL))
+        print(p("Escribe ",c.AMARILLO) + p("salir", c.ROJO) + p(" si deseas volver al menú", c.AMARILLO))
         username = input(p("Usuario: ", c.AZUL)).strip()
+        if username.lower() == "salir":
+            return
         password = input(p("Contraseña: ", c.AZUL)).strip()
+        if password.lower() == "salir":
+            return
         success, data = d.login(username, password)
 
         if success:
@@ -86,7 +98,7 @@ def iniciar_sesion():
             limpiar_consola() 
             print(p("\nUsuario o contraseña incorrectos", c.ROJO))
             print(p("Vuelve a intentarlo.", c.ROJO))
-            t.sleep(0.5)
+            t.sleep(1)
 
 def mostrar_menu():
     """
@@ -144,7 +156,33 @@ def ver_users():
         print(p(f"\n{data}", c.ROJO))
         t.sleep(0.2)
 
-def ver_spaces_por_usuario():
+def seguir_space_space(usuario):
+    """Permite a un usuario seguirt un space.
+    
+    Solicita el nombre de usuario y el ID del space por consola, y utiliza la
+    funcion follow_space para registrar la acción. Informa si la operación fue
+    exitosa o si ocurrió un error.
+
+    Args:
+        None
+        
+    Returns:
+        None
+    """
+    print(p(usuario, c.ROJO))
+    print(p("\n===== Seguir el space =====\n", c.AZUL, c.NEGRITA))
+    space_id = input(p("Ingrese el space id que deseas seguir: ", c.AZUL)).strip()
+    success, data = d.follow_space(usuario, space_id)
+    
+    if success:
+        print(p("\nSpace seguido exitosamente", c.VERDE))
+        t.sleep(0.2)
+    else:
+        print(p(f"\n{data}", c.ROJO))
+        print(p("Vuelve a intentarlo.", c.ROJO))
+        t.sleep(0.2)    
+    
+def ver_spaces_por_usuario(usuario):
     """
     Obtiene y muestra los spaces asociados a un usuario.
 
@@ -160,8 +198,11 @@ def ver_spaces_por_usuario():
         None
     """
     print(p("\n===== VER SPACE POR USUARIO =====", c.NEGRITA, c.AZUL))
-    username =  input(p("\nIngresa el usuario del space: ", c.VERDE)).strip()   
-
+    print(p("Escribe ",c.AMARILLO) + p("salir", c.ROJO) + p(" si deseas volver al menú", c.AMARILLO))
+    username =  input(p("\nIngresa el usuario del space: ", c.VERDE)).strip()
+    limpiar_consola()
+    if username.lower() == "salir":
+        return
     success, data = d.get_spaces_by_user(username)
     
     if success:
@@ -173,6 +214,16 @@ def ver_spaces_por_usuario():
             for i, space in enumerate(data, start=1):
                 print(f"{i}. {space}")
                 t.sleep(0.2)
+
+            while True:
+                print(p("1) Seguir un space ", c.AZUL) + p("2) Salir al menú principal ", c.AMARILLO))
+                opcion = input("> ")
+                if opcion == "1":
+                    seguir_space_space(usuario)
+                elif opcion == "2":
+                    break
+                else:
+                    print("Opcion no valida")
     else:
         print(p(f"\n{data}", c.ROJO))
         t.sleep(0.2)
@@ -189,10 +240,19 @@ def crear_space(usuario):
         None
     """
     print(p("\n ===Crear un space===", c.NEGRITA, c.AZUL))
+    print(p("Escribe ",c.AMARILLO) + p("salir", c.ROJO) + p(" si deseas volver al menú", c.AMARILLO))
     username = input(p("Ingresa tu usuario: ", c.AZUL)).strip()
+    if username.lower() == "salir":
+        return
     name = input(p("Ingresa el nombre del nuevo espacio: ", c.AZUL)).strip()
+    if name.lower() == "salir":
+        return
     description = input(p("Ingresa la descripcion del nuevo espacio: ", c.AZUL)).strip()
+    if description.lower() == "salir":
+        return
     visibility = input(p("Ingresa la visibilidad del nuevo espacio(public): ", c.AZUL)).strip()
+    if visibility.lower() == "salir":
+        return
     
     success, data = d.create_space(usuario, name, description)
 
@@ -218,10 +278,27 @@ def crear_post():
         None
     """
     print(p("\n===== Crear un post =====", c.NEGRITA, c.AZUL))
-    space_id = int(input(p("Ingresa el space ID al que pertenecerá el nuevo post: ", c.AZUL)))
+    print(p("Escribe ",c.AMARILLO) + p("salir", c.ROJO) + p(" si deseas volver al menú", c.AMARILLO))
+    while True:
+        space_id = input(p("Ingresa el space ID al que pertenecerá el nuevo post: ", c.AZUL))
+        if space_id.lower() == "salir":
+            return
+        try:
+            space_id = int(space_id)
+            break
+        except ValueError:
+            print(p("Debe ingresar un número válido para el Space ID.", c.ROJO))
+            t.sleep(0.2)
+
     title = input(p("Ingresa el Titulo del nuevo post: ", c.AZUL))
+    if title.lower() == "salir":
+        return
     content = input(p("Ingresa el Contenido del nuevo post: ", c.AZUL))
+    if content.lower() == "salir":
+        return
     post_type = input(p("Ingresa el Tipo de post (post/snippet): ", c.AZUL))
+    if post_type.lower() == "salir":
+        return
 
     success, data = d.create_post(space_id, title, content, post_type)
 
@@ -249,7 +326,10 @@ def seguir_space(usuario):
         None
     """
     print(p("\n===== Seguir un space =====\n", c.AZUL, c.NEGRITA))
+    print(p("Escribe ",c.AMARILLO) + p("salir", c.ROJO) + p(" si deseas volver al menú", c.AMARILLO))
     user_space = input(p("Ingrese el nombre del usuario que quieres seguir:", c.AZUL))
+    if user_space.lower() == "salir":
+        return
     success, data = d.get_spaces_by_user(user_space)
 
     if success:
@@ -266,6 +346,8 @@ def seguir_space(usuario):
         t.sleep(0.2)
 
     space_id = input(p("Ingresa el space id que deseas seguir: ", c.AZUL)).strip()
+    if space_id.lower() == "salir":
+        return
 
     success, data = d.follow_space(usuario, space_id)
 
@@ -294,15 +376,24 @@ def gestion_solicitudes(usuario):
     while ciclo == True:
         print(p("GESTION DE SOLICITUDES DE SEGUIMIENTO", c.AZUL, c.NEGRITA))
         print(p("Ingrese el ID SPACE que desea seguir", c.AMARILLO))
+        print(p("Escribe ",c.AMARILLO) + p("salir", c.ROJO) + p(" si deseas volver al menú", c.AMARILLO))
+        
+        space_id_texto = input(p("ID del space: ", c.VERDE)).strip()
+       
+        if space_id_texto.lower() == "salir":
+            return
+        
         try:
-            space_id = int(input(p("ID del space: ", c.VERDE)))
+            space_id = int(space_id_texto)
         except ValueError:
-            print(p("Debe ingresar un número válido para el Space ID.", c.ROJO))
+            print(p("Debe ingresar un número válido para el Space ID o escribir 'salir'.", c.ROJO))
             t.sleep(0.2)
             continue
 
         print(p("Nombre de usuario que solicita seguir el space", c.AMARILLO))
         user_que_solicita = input(p("Nombre: ", c.VERDE))
+        if user_que_solicita.lower() == "salir":
+            return
 
         print(p(usuario, c.MAGENTA_BRIGHT) + p(" ID del space = ", c.MAGENTA_BRIGHT) + p(str(space_id), c.CYAN_BRIGHT) + p(": PROCESA A: ", c.MAGENTA_BRIGHT) + p(user_que_solicita, c.CYAN_BRIGHT))
         print(p("1. Aceptar", c.VERDE))
@@ -452,8 +543,11 @@ def ver_posts_por_space():
         None
     """
     print(p("\n===== Post por Space =====", c.NEGRITA, c.AZUL))
-
+    print(p("Escribe ",c.AMARILLO) + p("salir", c.ROJO) + p(" si deseas volver al menú", c.AMARILLO))
+    
     user_space = input(p("Ingrese el nombre dueño del Space: ", c.AZUL))
+    if user_space.lower() == "salir":
+        return
     success, data = d.get_spaces_by_user(user_space)
 
     if success:
@@ -470,13 +564,19 @@ def ver_posts_por_space():
         print(p("El usuario ", c.ROJO) + f"{user_space} " + p("no tiene Spaces", c.ROJO))
         return
 
-    try:
-        space_id = int(input(p("Ingrese el space ID del que desea obtener los posts: ", c.AZUL)))
-    except ValueError:
-        print(p("\n===== Post por Space =====", c.NEGRITA, c.AZUL))
-        print(p("Debe ingresar un número válido para el Space ID.", c.ROJO))
-        t.sleep(0.2)
-        return
+    while True:
+        space_id_texto = input(p("Ingrese el space ID del que desea obtener los posts: ", c.AZUL)).strip()
+
+        if space_id_texto.lower() == "salir":
+            return
+
+        try:
+            space_id = int(space_id_texto)
+            break
+        except ValueError:
+            print(p("\n===== Post por Space =====", c.NEGRITA, c.AZUL))
+            print(p("Debe ingresar un número válido para el Space ID o escribir 'salir'.", c.ROJO))
+            t.sleep(0.2)
 
     success2, data2 = d.get_posts(space_id, user_space)
 
@@ -511,20 +611,26 @@ def ver_posts_por_space():
 
                 print()
                 print(
-                    p("1) Ver post anterior   ", c.AMARILLO) +
-                    p("2) Ver siguiente post   ", c.VERDE) +
-                    p("3) Salir", c.AZUL)
+                    p("1) Ir a primer post   ", c.AZUL) +
+                    p("2) Ver post anterior   ", c.AMARILLO)+
+                    p("3) Ver siguiente post   ", c.VERDE)+
+                    p("4) Ir al último post   ", c.AZUL)+
+                    p("5) Salir", c.ROJO)
                 )
 
                 opcion = input(p("> ", c.VERDE))
 
                 if opcion == "1":
-                    if i > 0:
-                        i -= 1
+                    i = 0
                 elif opcion == "2":
+                    if i >0:
+                        i -= 1
+                elif opcion == "3":
                     if i < len(posts) - 1:
                         i += 1
-                elif opcion == "3":
+                elif opcion == "4":
+                    i = len(posts) - 1
+                elif opcion == "5":
                     break
                 else:
                     print(p("Opción no válida", c.ROJO))
@@ -561,7 +667,7 @@ def menu_principal(usuario):
 
         elif opcion == "2":
             limpiar_consola()
-            ver_spaces_por_usuario()
+            ver_spaces_por_usuario(usuario)
 
         elif opcion == "3":
             limpiar_consola()
@@ -626,6 +732,8 @@ def main():
         if login == "1": 
             limpiar_consola() 
             usuario = iniciar_sesion()
+            if usuario is None:
+                continue
             menu_principal(usuario)
         elif login == "2":
             limpiar_consola()  
