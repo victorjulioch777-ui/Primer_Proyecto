@@ -390,8 +390,7 @@ def ver_seguidores_de_mis_spaces(usuario):
 
             for i, follower in enumerate(data, start=1):
                 username_seguidor = follower
-                id_space = follower
-                nombre_space = follower
+
                 estado = follower
 
                 if estado == True:
@@ -399,9 +398,7 @@ def ver_seguidores_de_mis_spaces(usuario):
                 else:
                     estado_texto = "Pendiente/Rechazado"
 
-                escribir_lento(f"{i}. Seguidor: {username_seguidor}", delay=0.01)
-                escribir_lento(f"   ID Space: {id_space}", delay=0.01)
-                escribir_lento(f"   Space: {nombre_space}", delay=0.01)
+                escribir_lento(f"{i}. Seguidor/Seguidores: {username_seguidor}", delay=0.01)
                 escribir_lento(f"   Estado: {estado_texto}", delay=0.01)
                 escribir_lento("-" * 40, delay=0.005)
                 t.sleep(0.2)
