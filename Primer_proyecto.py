@@ -37,7 +37,7 @@ def crear_usuario():
         None
     """
     while True:
-        print("===== Creación de usuario =====", c.AZUL)
+        print(p("===== Creación de usuario =====", c.AZUL))
         username = input(p("Usuario: ", c.AZUL)).strip()
         email = input(p("Email: ", c.AZUL)).strip()
         password = input(p("Contraseña: ", c.AZUL)).strip()
@@ -74,7 +74,6 @@ def iniciar_sesion():
         print(p("\n===== INICIO DE SESIÓN =====", c.AZUL))
         username = input(p("Usuario: ", c.AZUL)).strip()
         password = input(p("Contraseña: ", c.AZUL)).strip()
-
         success, data = d.login(username, password)
 
         if success:
@@ -114,6 +113,7 @@ def mostrar_menu():
     print(p("9.", c.AMARILLO ) +p(" Consulta de seguidores", c.AZUL))
     print(p("10.", c.AMARILLO ) +p(" Consulta de post por space", c.AZUL))
     print(p("11.", c.AMARILLO ) +p(" Cerrar sesión", c.AZUL))
+
 
 def ver_users():
     """
@@ -301,7 +301,7 @@ def gestion_solicitudes(usuario):
             t.sleep(0.2)
             continue
 
-        print(p("Nombre de usuario propietario del space", c.AMARILLO))
+        print(p("Nombre de usuario que solicita seguir el space", c.AMARILLO))
         user_que_solicita = input(p("Nombre: ", c.VERDE))
 
         print(p(usuario, c.MAGENTA_BRIGHT) + p(" ID del space = ", c.MAGENTA_BRIGHT) + p(str(space_id), c.CYAN_BRIGHT) + p(": PROCESA A: ", c.MAGENTA_BRIGHT) + p(user_que_solicita, c.CYAN_BRIGHT))
@@ -497,18 +497,17 @@ def ver_posts_por_space():
                 contenido = post[2]
                 tipo = post[3]
 
-                if es_codigo(contenido):
-                    contenido_mostrar = colorear_codigo(contenido)
-                else:
-                    contenido_mostrar = contenido
-
                 print(p("\n===== Post del Space =====", c.NEGRITA, c.AZUL))
                 print(f"Post {i + 1} de {len(posts)}")
                 print(f"Tipo de POST: [{tipo}]")
                 print(f"Título: {titulo}")
                 print(f"Post ID: {id_post}")
-                print("Contenido:\n")
-                escribir_lento(contenido_mostrar)
+                print("Contenido:\n") 
+                
+                if es_codigo(contenido):
+                    print(colorear_codigo(contenido))
+                else:
+                    escribir_lento(contenido)
 
                 print()
                 print(

@@ -1,4 +1,5 @@
 import time
+import re
 
 def escribir_lento(texto, delay=0.03):
     """Muestra un texto en consola carácter por carácter.
@@ -69,7 +70,37 @@ def pintar(texto, color="", fondo="", estilo=""):
 
         
 keywords = [
-    "if","elif","else","for","while","break","continue","pass",
+    "is", "in", "not", "and", "or",
+    "del", "yield",
+    "with", "as",
+    "match", "case",
+    "finally",
+    "except",
+    "raise",
+    "assert",
+    "lambda",
+    "global",
+    "nonlocal",
+    "pass",
+    "break",
+    "continue",
+    "print", "input", "len", "range",
+    "int", "float", "str", "bool",
+    "list", "tuple", "set", "dict",
+    "open", "read", "write",
+    "append", "remove", "pop",
+    "sort", "reverse",
+    "format", "split", "join",
+    "True", "False", "None",         "def", "for", "if", "while", "import",
+    "=", ":", "elif", "else", "break", "continue", "pass",
+    "return", "lambda",
+    "True", "False", "None",
+    "and", "or", "not", "in", "is",
+    "try", "except", "finally", "raise", "assert",
+    "class", "self", "super",
+    "from", "as",
+    "async", "await", "with",
+    "global", "nonlocal", "if", "elif", "else", "for", "while", "break", "continue", "pass",
     "def","return","lambda",
     "True","False","None",
     "and","or","not","in","is",
@@ -81,18 +112,36 @@ keywords = [
 ]
 
 def es_codigo(texto):
-    """Determina si una cadena de texto contiene indicios de código fuente.
+    pistas = [
+        "def", "for", "if", "while", "import",
+        "=", ":", "elif", "else", "break", "continue", "pass",
+        "return", "lambda",
+        "True", "False", "None",
+        "and", "or", "not", "in", "is",
+        "try", "except", "finally", "raise", "assert",
+        "class", "self", "super",
+        "from", "as",
+        "async", "await", "with",
+        "global", "nonlocal"
+    ]
 
-    Args:
-        texto (_type_): La cadena de texto que se analizará.
+    contador = 0  # <-- esto te faltaba
 
-    Returns:
-        _type_: True si se detectan patrones asociados a código, False en caso contrario.
-    """
-    pistas = ["def", "for", "if", "while", "import", "print", "=", ":"]
-    return any(p in texto for p in pistas)
+    texto = texto.split() 
 
-def colorear_codigo(texto):
+    for palabra in texto:
+        limpia = palabra.strip("():,.;\"'\n\t")
+
+        if limpia in pistas:
+            contador += 1
+
+        if contador >= 2:
+            return True
+
+    return False
+
+
+def colorear_codigo(texto:list):
     """Resalta palabras reservadas dentro de un texto que contiene código.
 
     Args:
@@ -101,12 +150,18 @@ def colorear_codigo(texto):
     Returns:
         _type_: Texto resaltado a color.
     """
-    palabras = texto.split()
 
-    for i, palabra in enumerate(palabras):
+    """for i, palabra in enumerate(palabras):
         limpia = palabra.strip("():,")
         if limpia in keywords:
             palabras[i] = pintar(MAGENTA_BRIGHT) + palabra
 
-    return " ".join(palabras)
+    return " ".join(palabras)"""
 
+    tokens = re.split(r'(\W+)', texto)
+
+    for i, palabra in enumerate(tokens):
+        if palabra in keywords:
+            tokens[i] = pintar(palabra, MAGENTA_BRIGHT, "")
+
+    return "".join(tokens)
