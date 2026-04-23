@@ -6,7 +6,7 @@ import os
 import subprocess
 
 def limpiar_consola():
-    """Limpia la consola del sistema operativo actual.
+    """Limpia la consola de la terminal.
     
     Detecta el sistema operativo mediante "os.name" y ejecuta el comando
     limpiar la pantalla en terminal.
@@ -87,7 +87,7 @@ def iniciar_sesion():
             limpiar_consola() 
             print(p("\nUsuario o contraseña incorrectos", c.ROJO))
             print(p("Vuelve a intentarlo.", c.ROJO))
-            t.sleep(0.2)
+            t.sleep(0.5)
 
 def mostrar_menu():
     """
@@ -221,7 +221,7 @@ def crear_post():
     space_id = int(input(p("Ingresa el space ID al que pertenecerá el nuevo post: ", c.AZUL)))
     title = input(p("Ingresa el Titulo del nuevo post: ", c.AZUL))
     content = input(p("Ingresa el Contenido del nuevo post: ", c.AZUL))
-    post_type = input(p("Ingresa el Tipo de post (post): ", c.AZUL))
+    post_type = input(p("Ingresa el Tipo de post (post/snippet): ", c.AZUL))
 
     success, data = d.create_post(space_id, title, content, post_type)
 
@@ -294,30 +294,43 @@ def gestion_solicitudes(usuario):
     while ciclo == True:
         print(p("GESTION DE SOLICITUDES DE SEGUIMIENTO", c.AZUL, c.NEGRITA))
         print(p("Ingrese el ID SPACE que desea seguir", c.AMARILLO))
-        space_id = int(input(p("ID del space: ", c.VERDE)))
+        try:
+            space_id = int(input(p("ID del space: ", c.VERDE)))
+        except ValueError:
+            print(p("Debe ingresar un número válido para el Space ID.", c.ROJO))
+            t.sleep(0.2)
+            continue
 
         print(p("Nombre de usuario propietario del space", c.AMARILLO))
         user_que_solicita = input(p("Nombre: ", c.VERDE))
 
-        print(p(usuario, c.MAGENTA_BRIGHT) + p(" ID del space = ", c.MAGENTA_BRIGHT) + p(space_id, c.CYAN_BRIGHT) + p(": PROCESA A: ", c.MAGENTA_BRIGHT) + p(user_que_solicita, c.CYAN_BRIGHT))
+        print(p(usuario, c.MAGENTA_BRIGHT) + p(" ID del space = ", c.MAGENTA_BRIGHT) + p(str(space_id), c.CYAN_BRIGHT) + p(": PROCESA A: ", c.MAGENTA_BRIGHT) + p(user_que_solicita, c.CYAN_BRIGHT))
         print(p("1. Aceptar", c.VERDE))
         print(p("2. Rechazar", c.ROJO))
         print("3. Salir")
 
-        opcion = int(input(p("opcion: ", c.VERDE)))
+        try:
+            opcion = int(input(p("opcion: ", c.VERDE)))
+        except ValueError:
+            print(p("Opción no válida. Ingrese un número.", c.ROJO))
+            t.sleep(0.2)
+            continue
+
         if opcion == 1:
             estado = True
             ciclo = False
         elif opcion == 2:
             estado = False
             ciclo = False
+        elif opcion == 3:
+            return
         else:
             print("No existe esa opcion", c.ROJO)
     
     success, data = d.handle_follower(usuario, space_id, user_que_solicita, estado)
 
     if success == True:
-        print(p("Se realizo correctamente la solicitud a", c.VERDE), p(user_que_solicita, c.CYAN_BRIGHT))
+        print(p("Se realizo correctamente la solicitud que el usuario deseaba:", c.VERDE), p(user_que_solicita, c.CYAN_BRIGHT))
         t.sleep(0.2)
     else:
         print(p("Algo falló, no se pudo realizar la solicitud a:", c.ROJO), p(user_que_solicita, c.CYAN_BRIGHT))
@@ -386,11 +399,11 @@ def ver_seguidores_de_mis_spaces(usuario):
                 else:
                     estado_texto = "Pendiente/Rechazado"
 
-                print(f"{i}. Seguidor: {username_seguidor}")
-                print(f"   ID Space: {id_space}")
-                print(f"   Space: {nombre_space}")
-                print(f"   Estado: {estado_texto}")
-                print("-" * 40)
+                escribir_lento(f"{i}. Seguidor: {username_seguidor}", delay=0.01)
+                escribir_lento(f"   ID Space: {id_space}", delay=0.01)
+                escribir_lento(f"   Space: {nombre_space}", delay=0.01)
+                escribir_lento(f"   Estado: {estado_texto}", delay=0.01)
+                escribir_lento("-" * 40, delay=0.005)
                 t.sleep(0.2)
     else:
         print(p(f"\n{data}", c.ROJO))
@@ -420,7 +433,7 @@ def ver_seguidores(usuario):
         else:
             print(p("\n===== SEGUIDORES =====", c.NEGRITA, c.AZUL))
             for i, follower in enumerate(data, start=1):
-                print(f"{i}. {follower}")
+                escribir_lento(f"{i}. {follower}", delay=0.015)
             t.sleep(0.2)
     else:
         print(p(f"\n{data}", c.ROJO))
@@ -521,7 +534,11 @@ def ver_posts_por_space():
                     print(p("Opción no válida", c.ROJO))
                     t.sleep(0.2)
     else:
-        print(p(f"\n{data}", c.ROJO))
+        error_msg = data2[1] if isinstance(data2, list) and len(data2) > 1 else data2[0] if isinstance(data2, list) and len(data2) > 0 else str(data2)
+        if isinstance(error_msg, list) and len(error_msg) > 0:
+            error_msg = error_msg[0]
+            
+        print(p(f"\n{error_msg}", c.ROJO))
         t.sleep(0.2)
 
 def menu_principal(usuario):
