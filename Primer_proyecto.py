@@ -223,7 +223,8 @@ def ver_spaces_por_usuario(usuario):
                 elif opcion == "2":
                     break
                 else:
-                    print("Opcion no valida")
+                    print(p("Opcion no valida", c.colorear_codigoROJO))
+                    t.sleep(0.3)
     else:
         print(p(f"\n{data}", c.ROJO))
         t.sleep(0.2)
@@ -379,7 +380,7 @@ def gestion_solicitudes(usuario):
         print(p("Escribe ",c.AMARILLO) + p("salir", c.ROJO) + p(" si deseas volver al menú", c.AMARILLO))
         
         space_id_texto = input(p("ID del space: ", c.VERDE)).strip()
-       
+
         if space_id_texto.lower() == "salir":
             return
         
@@ -598,11 +599,11 @@ def ver_posts_por_space():
                 tipo = post[3]
 
                 print(p("\n===== Post del Space =====", c.NEGRITA, c.AZUL))
-                print(f"Post {i + 1} de {len(posts)}")
-                print(f"Tipo de POST: [{tipo}]")
-                print(f"Título: {titulo}")
-                print(f"Post ID: {id_post}")
-                print("Contenido:\n") 
+                print(p("Post ", c.CYAN) + p(f"{i + 1}", c.VERDE) + p(" de ", c.CYAN) + p(f"{len(posts)}", c.VERDE))
+                print(p("Tipo de POST: [", c.CYAN) + p(f"{tipo}", c.VERDE) + p("]", c.CYAN))
+                print(p("Título: ", c.CYAN) + p(f"{titulo}", c.VERDE))
+                print(p("Post ID: ", c.CYAN) + p(f"{id_post}", c.VERDE))
+                print(p("Contenido:\n", c.CYAN)) 
                 
                 if es_codigo(contenido):
                     print(colorear_codigo(contenido))
