@@ -159,7 +159,7 @@ def ver_users():
 def seguir_space_space(usuario):
     """Permite a un usuario seguirt un space.
     
-    Solicita el nombre de usuario y el ID del space por consola, y utiliza la
+    Solicita el ID del space por consola, y utiliza la
     funcion follow_space para registrar la acción. Informa si la operación fue
     exitosa o si ocurrió un error.
 

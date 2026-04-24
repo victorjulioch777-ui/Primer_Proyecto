@@ -112,6 +112,19 @@ keywords = [
 ]
 
 def es_codigo(texto):
+    """Determina si un texto contiene indicios de ser código fuente.
+
+    Analiza el texto recibido, separa las palabras y compara cada una con
+    una lista de palabras clave comunes en Python. Si encuentra al menos
+    dos coincidencias, considera que el texto es código.
+
+    Args:
+        texto (str): Texto a evaluar.
+
+    Returns:
+        bool: True si el texto contiene al menos dos palabras clave de código,
+        False en caso contrario.
+    """
     pistas = [
         "def", "for", "if", "while", "import",
         "=", ":", "elif", "else", "break", "continue", "pass",
